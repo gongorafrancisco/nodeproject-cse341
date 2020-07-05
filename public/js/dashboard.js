@@ -1,6 +1,6 @@
 const getUserUrl = '/users/';
 const getTicketsUrl = '/tickets/user/';
-const userId = '2';
+const userId = '1';
 const rootElement = document.getElementById('root');
 const leftPanel = document.getElementById('left');
 const rightPanel = document.getElementById('right');
