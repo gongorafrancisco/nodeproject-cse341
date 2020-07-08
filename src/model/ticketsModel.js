@@ -20,7 +20,7 @@ function getTicketFromDb(id, callback) {
   function getTicketsByUserFromDb(id, callback) {
     console.log("Getting tickets by user from DB");
   
-    const sql = "SELECT ticket_date, ticket_id, ticket_title FROM tickets WHERE user_id = $1::int";
+    const sql = "SELECT ticket_date, ticket_id, ticket_title FROM tickets WHERE user_id = $1::int ORDER BY ticket_date desc";
     let params = [id];
 
     pool.query(sql, params, (err, result) => {

@@ -1,6 +1,7 @@
 const ticketsModel = require('../model/ticketsModel');
 
 function addTicket(req, res){
+    console.log(req.body);
     let user_id = req.body.userNo;
     let ticket_title = req.body.title;
     let ticket_content = req.body.content;
