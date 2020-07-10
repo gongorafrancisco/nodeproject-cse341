@@ -1,6 +1,5 @@
-const getUserUrl = '/users/';
-const getTicketsUrl = '/tickets/user/';
-const addTicketsUrl = '/tickets/add/';
-const userId = '2'; 
+const getUserUrl = '/users';
+const getTicketsUrl = '/tickets/user';
+const addTicketsUrl = '/tickets/add'; 
 
-export { getUserUrl, getTicketsUrl, addTicketsUrl, userId };
+export { getUserUrl, getTicketsUrl, addTicketsUrl };

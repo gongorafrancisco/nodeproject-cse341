@@ -1,4 +1,4 @@
-import { getUserUrl, getTicketsUrl, addTicketsUrl, userId } from './modules/urls.js';
+import { getUserUrl, getTicketsUrl, addTicketsUrl } from './modules/urls.js';
 import { createRequest, fail, postNewTicket } from './modules/requests.js';
 import {userInfoBox, ticketsInfoBox, ticketsList} from './modules/elements.js';
 
@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', defaultUIConstructor);
 
 // UI Constructors
 function defaultUIConstructor() {
-    const userInfoUrl = getUserUrl + userId;
-    const ticketsInfoUrl = getTicketsUrl + userId;
+    const userInfoUrl = getUserUrl;
+    const ticketsInfoUrl = getTicketsUrl;
     createRequest(userInfoUrl, getUserInfo, fail);
     createRequest(ticketsInfoUrl, getTicketsInfo, fail);
 }
@@ -16,7 +16,7 @@ function afterAddTicketUIConstructor() {
     removeChilds(ticketsList);
     removeChilds(ticketsInfoBox);
     ticketsInfoBox.appendChild(ticketsList);
-    const ticketsInfoUrl = getTicketsUrl + userId;
+    const ticketsInfoUrl = getTicketsUrl;
     createRequest(ticketsInfoUrl, getTicketsInfo, fail);
 }
 
@@ -51,7 +51,7 @@ function userInfoConstructor(data, element) {
 
     const logoutBox = document.createElement('li');
     const logoutLink = elementConstructor('a', 'Logout');
-    logoutLink.href = '/logout/' + data.user_id;
+    logoutLink.href = '/logout';
     logoutLink.classList.add('btn', 'btn-secondary', 'mx-1', 'my-2');
     logoutBox.appendChild(logoutLink);
 

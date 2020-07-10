@@ -1,10 +1,9 @@
 const ticketsModel = require('../model/ticketsModel');
 
 function addTicket(req, res){
-    console.log(req.body);
-    let user_id = req.body.userNo;
-    let ticket_title = req.body.title;
-    let ticket_content = req.body.content;
+    const user_id = req.session.userID;
+    const ticket_title = req.body.title;
+    const ticket_content = req.body.content;
     const obj = { user_id: user_id, ticket_title: ticket_title, ticket_content: ticket_content };
 
     ticketsModel.insertTicketToDb(obj, (error, result) => {
@@ -17,11 +16,13 @@ function addTicket(req, res){
 };
 
 function deleteTicket(req, res){
-    let id = Number(req.body.id);
-    if (id < 1 || Number.isNaN(id)) {
+    let user_id = req.session.userID;
+    let ticket_id = Number(req.body.id);
+    if (ticket_id < 1 || Number.isNaN(ticket_id)) {
         res.status(500).json({ success: false, data: "ID must be a valid positive number and greater than zero" });
     } else {
-        ticketsModel.removeTicketFromDb(id, (error, result) => {
+        const obj = { user_id: user_id, ticket_id: ticket_id};
+        ticketsModel.removeTicketFromDb(obj, (error, result) => {
             if (error || result == null) {
                 res.status(500).json({ success: false, data: error });
             } else {
@@ -32,12 +33,14 @@ function deleteTicket(req, res){
 };
 
 function getTicket(req, res){
-    let id = Number(req.params.id) || Number(req.query.id);
+    const user_id = req.session.userID;
+    const ticket_id = Number(req.params.id) || Number(req.query.id);
 
-    if (id < 1 || Number.isNaN(id)) {
+    if (ticket_id < 1 || Number.isNaN(ticket_id)) {
         res.status(500).json({ success: false, data: "ID must be a valid number and greater than zero" });
     } else {
-        ticketsModel.getTicketFromDb(id, (error, result) => {
+        const obj = { user_id: user_id, ticket_id: ticket_id };
+        ticketsModel.getTicketFromDb(obj, (error, result) => {
             if (error || result == null || result.length < 1) {
                 res.status(500).json({ success: false, data: error });
             } else {
@@ -48,9 +51,8 @@ function getTicket(req, res){
 };
 
 function getTicketByUser(req, res){
-    let id = Number(req.params.id)
-    console.log(id);
-    ticketsModel.getTicketsByUserFromDb(id, (error, result) => {
+    let user_id = req.session.userID;
+    ticketsModel.getTicketsByUserFromDb(user_id, (error, result) => {
         if (error || result == null) {
             res.status(500).json({ success: false, data: error });
         } else {
