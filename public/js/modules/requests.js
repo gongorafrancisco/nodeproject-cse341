@@ -25,4 +25,17 @@ function postNewTicket ( url, requestOptions, success, fail) {
         .catch((error) => fail(error));
 }
 
-export { createRequest, fail, handleErrors, postNewTicket };
+function deleteTicketRequest(url, requestOptions, success, fail) {
+    fetch(url, requestOptions)
+        .then((response) => handleErrors(response))
+        .then((data) => success(data))
+        .catch((error) => fail(error));
+}
+
+function completeTicketRequest(url, requestOptions, success, fail) {
+    fetch(url, requestOptions)
+    .then((response) => handleErrors(response))
+    .then((data) => success(data))
+    .catch((error) => fail(error));
+}
+export { createRequest, fail, handleErrors, postNewTicket, deleteTicketRequest, completeTicketRequest };

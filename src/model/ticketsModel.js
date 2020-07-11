@@ -2,7 +2,7 @@ const pool = require('./pool');
 function getTicketFromDb(data, callback) {
     console.log("Getting ticket: " + data.ticket_id + ", from user: " + data.user_id + " on the DB");
   
-    const sql = "SELECT ticket_id, ticket_title, ticket_content FROM tickets WHERE ticket_id = $1::int AND user_id = $2::int";
+    const sql = "SELECT ticket_id, ticket_date, ticket_title, ticket_content, ticket_closed FROM tickets WHERE ticket_id = $1::int AND user_id = $2::int";
   
     const params = [data.ticket_id, data.user_id];
   
@@ -20,7 +20,7 @@ function getTicketFromDb(data, callback) {
   function getTicketsByUserFromDb(user_id, callback) {
     console.log("Getting tickets from user: " + user_id + " from DB");
   
-    const sql = "SELECT ticket_date, ticket_id, ticket_title FROM tickets WHERE user_id = $1::int ORDER BY ticket_date desc";
+    const sql = "SELECT ticket_date, ticket_id, ticket_title, ticket_closed FROM tickets WHERE user_id = $1::int ORDER BY ticket_date desc";
     let params = [user_id];
 
     pool.query(sql, params, (err, result) => {
@@ -53,7 +53,7 @@ function getTicketFromDb(data, callback) {
     })
   };
 
-  function removeticketFromDb(data, callback) {
+function removeTicketFromDb(data, callback) {
     console.log("Removing ticket from DB");
   
     const sql = "DELETE FROM tickets WHERE ticket_id = $1::int and user_id = $2::int";
@@ -73,12 +73,12 @@ function getTicketFromDb(data, callback) {
     })
   };
 
-  function updateticketFromDb (data, callback) {
+  function updateTicketFromDb (data, callback) {
     console.log("Updating ticket from DB");
   
-    const sql = "UPDATE tickets SET ticket_name = $1, ticket_email = $2, ticket_password = $3 WHERE ticket_id = $4";
+    const sql = "UPDATE tickets SET ticket_closed = true WHERE ticket_id = $1::int AND user_id = $2::int";
   
-    const params = [data.ticket_name, data.ticket_email, data.ticket_password, data.ticket_id];
+    const params = [data.ticket_id, data.user_id];
   
     pool.query(sql, params, (err, result) => {
       if (err) {
@@ -96,6 +96,6 @@ module.exports = {
     getTicketFromDb: getTicketFromDb,
     getTicketsByUserFromDb: getTicketsByUserFromDb,
     insertTicketToDb: insertTicketToDb,
-    removeticketFromDb: removeticketFromDb,
-    updateticketFromDb: updateticketFromDb
+    removeTicketFromDb: removeTicketFromDb,
+    updateTicketFromDb: updateTicketFromDb
 }

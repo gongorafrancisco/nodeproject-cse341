@@ -15,11 +15,30 @@ function addTicket(req, res){
     });
 };
 
-function deleteTicket(req, res){
-    let user_id = req.session.userID;
-    let ticket_id = Number(req.body.id);
+function updateTicket(req, res){
+    const user_id = req.session.userID;
+    const ticket_id = Number(req.body.ticket_id);
+
     if (ticket_id < 1 || Number.isNaN(ticket_id)) {
-        res.status(500).json({ success: false, data: "ID must be a valid positive number and greater than zero" });
+        res.status(500).json({ success: false, data: "Ticket ID must be a valid positive number and greater than zero" });
+    } else {
+        const obj = { user_id: user_id, ticket_id: ticket_id};
+        ticketsModel.updateTicketFromDb(obj, (error, result) => {
+            if (error || result == null) {
+                res.status(500).json({ success: false, data: error });
+            } else {
+                res.status(200).json(result);
+            }
+        });
+    }
+};
+
+function deleteTicket(req, res){
+    const user_id = req.session.userID;
+    const ticket_id = Number(req.body.ticket_id);
+
+    if (ticket_id < 1 || Number.isNaN(ticket_id)) {
+        res.status(500).json({ success: false, data: "Ticket ID must be a valid positive number and greater than zero" });
     } else {
         const obj = { user_id: user_id, ticket_id: ticket_id};
         ticketsModel.removeTicketFromDb(obj, (error, result) => {
@@ -34,10 +53,10 @@ function deleteTicket(req, res){
 
 function getTicket(req, res){
     const user_id = req.session.userID;
-    const ticket_id = Number(req.params.id) || Number(req.query.id);
+    const ticket_id = Number(req.params.ticket_id) || Number(req.query.ticket_id);
 
     if (ticket_id < 1 || Number.isNaN(ticket_id)) {
-        res.status(500).json({ success: false, data: "ID must be a valid number and greater than zero" });
+        res.status(500).json({ success: false, data: "Ticket id must be a valid number and greater than zero" });
     } else {
         const obj = { user_id: user_id, ticket_id: ticket_id };
         ticketsModel.getTicketFromDb(obj, (error, result) => {
@@ -65,5 +84,6 @@ module.exports = {
     addTicket: addTicket,
     deleteTicket: deleteTicket,
     getTicket: getTicket,
-    getTicketByUser: getTicketByUser
+    getTicketByUser: getTicketByUser,
+    updateTicket: updateTicket
 };

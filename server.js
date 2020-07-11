@@ -33,13 +33,10 @@ app.set('view engine', 'ejs')
 // Default route at the root directory
 app.get('/', function(req, res) {
   if (req.session.userID) {
-		// They are logged in!
-		// pass things along to the next function
     res.redirect('/dashboard');
 	} else {
     res.sendFile(path.join(__dirname + "/private/login.html"));
   }
-  
 });
 
 app.get('/dashboard', function(req, res) {

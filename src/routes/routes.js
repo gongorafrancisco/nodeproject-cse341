@@ -20,7 +20,7 @@ const routes = (app) => {
         .delete(companiesController.deleteCompany);
 
     app.route('/users')
-        .get(usersController.getUser);
+        .get(verifyLogin, usersController.getUser);
     app.route('/users/company/:companyNo')
         .get(usersController.getCompanyUsers);
     app.route('/users/add/')
@@ -31,23 +31,22 @@ const routes = (app) => {
         .delete(usersController.deleteUser);
  
     app.route('/tickets/add')
-        .post(ticketsController.addTicket);
+        .post(verifyLogin, ticketsController.addTicket);
     app.route('/tickets/user')
-        .get(ticketsController.getTicketByUser);
+        .get(verifyLogin, ticketsController.getTicketByUser);
+    app.route('/tickets/:ticket_id')
+        .get(verifyLogin, ticketsController.getTicket);
+    app.route('/tickets/delete')
+        .delete(verifyLogin, ticketsController.deleteTicket);
+    app.route('/tickets/update')
+        .put(verifyLogin, ticketsController.updateTicket);
 }
 
-// This is a middleware function that we can use with any request
-// to make sure the user is logged in.
-function verifyLogin(request, response, next) {
-	if (request.session.userID) {
-		// They are logged in!
-		// pass things along to the next function
+function verifyLogin(req, res, next) {
+	if (req.session.userID) {
 		next();
 	} else {
-		// They are not logged in
-		// Send back an unauthorized status
-		var result = {success:false, message: "Access Denied"};
-		response.status(401).json(result);
+        res.redirect('/');
 	}
 }
 module.exports = routes;
