@@ -44,6 +44,7 @@ function getTicketFromDb(data, callback) {
     pool.query(sql, params, (err, result) => {
       if (err) {
         console.log("Error in query: ");
+        console.log(err);
         callback(err, null);
       } else {
         let myArray = [{recordsInserted: result.rowCount}];

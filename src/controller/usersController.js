@@ -12,11 +12,14 @@ function handleLogin(req, res) {
             res.redirect('/');
         } else {
             if (bcrypt.compareSync(user_password, result[0].user_password)){
+                console.log('Password for user ' + result[0].user_id + 'matches');
                 console.log('User with user_id: ' + result[0].user_id + ' is now logged in');
                 req.session.userID = result[0].user_id;
                 res.redirect('/dashboard');
             }
             else {
+                console.log('Password for user ' + result[0].user_id + 'don\'nt match');
+                console.log('Redirecting user to login page');
                 res.redirect('/');
             }
         }
