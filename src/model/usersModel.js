@@ -2,9 +2,9 @@ const pool = require('./pool');
 
 function checkUserLoginDb (data, callback) {
   console.log('Checking for user email and password on the DB');
-  const sql = "SELECT user_id FROM users WHERE user_email = $1 and user_password = $2";
+  const sql = "SELECT user_id, user_password FROM users WHERE user_email = $1";
 
-  const params = [data.user_email, data.user_password];
+  const params = [data.user_email];
 
   pool.query(sql, params, (err, result) => {
     if (err) {

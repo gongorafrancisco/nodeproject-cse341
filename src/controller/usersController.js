@@ -1,17 +1,24 @@
 const usersModel = require('../model/usersModel');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 function handleLogin(req, res) {
     const user_email = req.body.email;
     const user_password = req.body.password;
-    const obj = { user_email: user_email, user_password: user_password };
+    const obj = { user_email: user_email };
 
     usersModel.checkUserLoginDb(obj, (error, result) => {
         if (error || result == null || result.length < 1) {
             res.redirect('/');
         } else {
-            console.log('User with user_id: ' + result[0].user_id + ' is now logged in');
-            req.session.userID = result[0].user_id;
-            res.redirect('/dashboard');
+            if (bcrypt.compareSync(user_password, result[0].user_password)){
+                console.log('User with user_id: ' + result[0].user_id + ' is now logged in');
+                req.session.userID = result[0].user_id;
+                res.redirect('/dashboard');
+            }
+            else {
+                res.redirect('/');
+            }
         }
     })
 }
@@ -28,11 +35,15 @@ function handleLogout(req, res) {
 }
 
 function addUser(req, res) {
-    let user_name = req.body.name;
-    let user_email = req.body.email;
-    let user_password = req.body.password;
-    let company_id = req.body.companyNo;
-    const obj = { user_name: user_name, user_email: user_email, user_password: user_password, company_id:company_id };
+    const user_name = req.body.name;
+    const user_email = req.body.email;
+    const user_password = req.body.password;
+    const company_id = req.body.companyNo;
+
+    //Salt and hash the password with BCrypt
+    const hash = bcrypt.hashSync(user_password, saltRounds);
+
+    const obj = { user_name: user_name, user_email: user_email, user_password: hash, company_id:company_id };
 
     usersModel.insertUserToDb(obj, (error, result) => {
         if (error || result == null) {
