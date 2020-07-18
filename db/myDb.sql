@@ -16,7 +16,7 @@ CREATE TABLE companies (
 
 CREATE TABLE tickets (
     ticket_id   INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES companies(company_id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     ticket_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     ticket_title    TEXT NOT NULL,
     ticket_content  TEXT NOT NULL,
